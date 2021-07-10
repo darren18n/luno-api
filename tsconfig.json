@@ -1,0 +1,39 @@
+{
+  // This is an alias to @tsconfig/node12: https://github.com/tsconfig/bases
+  "extends": "ts-node/node16/tsconfig.json",
+
+  // Most ts-node options can be specified here using their programmatic names.
+  "ts-node": {
+    // It is faster to skip typechecking.
+    // Remove if you want ts-node to do typechecking.
+    "transpileOnly": true,
+
+    "files": true,
+
+    "compilerOptions": {
+      // compilerOptions specified here will override those declared below,
+      // but *only* in ts-node.  Useful if you want ts-node and tsc to use
+      // different options with a single tsconfig.json.
+    }
+  },
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "pretty": true,
+    "sourceMap": true,
+    "target": "ES2020",
+    "outDir": "./dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@middleware/*": ["middleware/*"],
+      "@routes/*": ["routes/*"],
+      "*": ["./node_modules/*"]
+    }
+  },
+  "include": [
+    "./src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
