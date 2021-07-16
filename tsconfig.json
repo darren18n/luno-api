@@ -27,6 +27,7 @@
     "paths": {
       "@middleware/*": ["middleware/*"],
       "@routes/*": ["routes/*"],
+      "@services/*": ["services/*"],
       "*": ["./node_modules/*"]
     }
   },

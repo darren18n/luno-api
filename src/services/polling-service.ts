@@ -37,10 +37,12 @@ export default pollingService;
 
 type Listener<EventType> = (ev: EventType) => void;
 
-function createObserver<EventType>(): {
+interface IObserver<EventType> {
   subscribe: (listener: Listener<EventType>) => () => void;
   publish: (event: EventType) => void;
-} {
+}
+
+function createObserver<EventType>(): IObserver<EventType> {
   let listeners: Listener<EventType>[] = [];
   return {
     subscribe: (listener: Listener<EventType>): () => void => {

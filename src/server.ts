@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import securityMiddleware from '@middleware/security';
-import pollingService from './polling-service';
+import pollingService from '@services/polling-service';
 
 
 const app = express();
