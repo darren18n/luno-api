@@ -25,6 +25,7 @@
     "outDir": "./dist",
     "baseUrl": "./src",
     "paths": {
+      "@common/*": ["common/*"],
       "@middleware/*": ["middleware/*"],
       "@routes/*": ["routes/*"],
       "@services/*": ["services/*"],
