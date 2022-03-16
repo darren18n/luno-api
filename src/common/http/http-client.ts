@@ -1,9 +1,11 @@
-import axios, { AxiosError, AxiosInstance } from "axios";
+import axios, { AxiosInstance, AxiosResponse } from "axios";
 import { HttpVerb } from "./http-enums";
 import { CustomError, HttpError, NetworkError, TimeoutError } from "@common/errors";
-import { HttpRequest, IHttpResponse } from "./";
+import { IHttpRequest } from "./";
 import { HttpClientBase, HttpConfig } from "./http-client-base";
 import { HttpErrorHandler } from "./http-error-handler";
+
+type RequestError = HttpError | TimeoutError | NetworkError | CustomError;
 
 export class HttpClient extends HttpClientBase {
   private client: AxiosInstance;
@@ -16,7 +18,7 @@ export class HttpClient extends HttpClientBase {
       });
   }
 
-  public async sendRequest(request: HttpRequest): Promise<any> {
+  public async sendRequest(request: IHttpRequest): Promise<AxiosResponse|RequestError> {
     return this.client
       .request(request.config)
       .then(response => {
@@ -37,13 +39,13 @@ export class HttpClient extends HttpClientBase {
     return backoffFactor < HttpConfig.MaxBackoffFactor ? backoffFactor * 1000 : HttpConfig.MaxBackoffFactor * 1000;
   }
 
-  private async delayedRetry(request: HttpRequest, delay: number): Promise<IHttpResponse | AxiosError> {
+  private async delayedRetry(request: IHttpRequest, delay: number): Promise<AxiosResponse | RequestError> {
     const pause = (duration: number) => new Promise(resolve => setTimeout(resolve, duration, null));
     return this.sendRequest(request)
-      .catch(error => pause(delay).then(() => this.retry(error, delay)));
+      .catch(error => pause(delay).then(() => this.retry(error)));
   }
 
-  private retry(error: HttpError | TimeoutError | NetworkError | CustomError, delay: number = 500): Promise<IHttpResponse | AxiosError> {
+  private retry(error: RequestError): Promise<AxiosResponse | RequestError> {
     if ((error instanceof HttpError) || (error instanceof TimeoutError) || (error instanceof NetworkError)) {
       const { request } = error;
       request.retries = request.retries + 1;

@@ -9,7 +9,7 @@ export interface IHttpRequestConfig {
   timeout: number;
 }
 
-export class HttpRequestConfig implements IHttpRequestConfig { 
+export class HttpRequestConfig implements IHttpRequestConfig {
   public method: HttpVerb;
   public baseURL: string;
   public url: string;
